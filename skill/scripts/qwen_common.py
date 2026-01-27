@@ -43,16 +43,6 @@ def load_env() -> None:
             _load_dotenv_file(envp)
             break
 
-    # compatibility (Baoyu-style)
-    _load_dotenv_file(Path.home() / ".baoyu-skills" / ".env")
-    for parent in [cur.parent, *cur.parents]:
-        envp = parent / ".baoyu-skills" / ".env"
-        if envp.exists():
-            _load_dotenv_file(envp)
-            break
-
-
-
 def get_dashscope_key() -> str:
 )
             break
