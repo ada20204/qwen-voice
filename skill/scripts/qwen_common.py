@@ -24,25 +24,37 @@ def _load_dotenv_file(p: Path) -> None:
 
 
 def load_env() -> None:
-    """Load env vars in Baoyu-style precedence.
+    """Load env vars with project-specific naming, but keep compatibility.
 
-    Priority (low -> high):
-      1) ~/.baoyu-skills/.env
-      2) <repo>/.baoyu-skills/.env (walk upwards from this file)
-      3) existing process env always wins (we never override)
-
-    This makes it easy to keep keys out of the repo while still supporting
-    project-local setup.
+    Priority (low -> high, never override existing env):
+      1) ~/.qwen-voice/.env
+      2) <repo>/.qwen-voice/.env (walk upwards from this file)
+      3) ~/.baoyu-skills/.env (compat)
+      4) <repo>/.baoyu-skills/.env (compat)
     """
-    # user-level
-    _load_dotenv_file(Path.home() / ".baoyu-skills" / ".env")
+    # user-level (preferred)
+    _load_dotenv_file(Path.home() / ".qwen-voice" / ".env")
 
-    # project-level: walk up from this file and look for .baoyu-skills/.env
+    # project-level preferred
     cur = Path(__file__).resolve()
+    for parent in [cur.parent, *cur.parents]:
+        envp = parent / ".qwen-voice" / ".env"
+        if envp.exists():
+            _load_dotenv_file(envp)
+            break
+
+    # compatibility (Baoyu-style)
+    _load_dotenv_file(Path.home() / ".baoyu-skills" / ".env")
     for parent in [cur.parent, *cur.parents]:
         envp = parent / ".baoyu-skills" / ".env"
         if envp.exists():
             _load_dotenv_file(envp)
+            break
+
+
+
+def get_dashscope_key() -> str:
+)
             break
 
 

@@ -6,3 +6,5 @@ work/
 *.ogg
 *.wav
 *.mp3
+
+.qwen-voice/.env
