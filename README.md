@@ -22,13 +22,28 @@ Python:
 Required:
 - `DASHSCOPE_API_KEY`
 
-Load order (Baoyu-style, does not override existing env):
-1) `~/.config/qwen-voice/.env`
-2) `./.config/qwen-voice/.env` (project)
+### Where the code reads env from
 
-Example:
+The scripts support **both**:
+1) **User-level** (recommended): `~/.config/qwen-voice/.env`
+2) **Project-level** (dev/testing): `./.qwen-voice/.env`
+
+Precedence: user-level first, then project-level. Existing process env always wins (we never override).
+
+### Setup (recommended)
+
+Copy the template dir into your user config:
+
 ```bash
-cp .config/qwen-voice/.env.example .qwen-voice/.env
+cp -r .qwen-voice ~/.config/qwen-voice
+cp ~/.config/qwen-voice/.env.example ~/.config/qwen-voice/.env
+# edit ~/.config/qwen-voice/.env
+```
+
+### Setup (project-local, optional)
+
+```bash
+cp .qwen-voice/.env.example .qwen-voice/.env
 # edit .qwen-voice/.env
 ```
 
@@ -64,5 +79,5 @@ python3 skill/scripts/qwen_tts.py --text '你好，我是 George。' --voice-pro
 ## Repo layout
 
 - `skill/`  Clawdbot skill (scripts + SKILL.md)
-- `.config/qwen-voice/.env.example`  env template (do not commit real keys)
-- `requirements.in` / `requirements.txt`  dependency list (uv generated)
+- `.qwen-voice/`  env template directory (copy to `~/.config/qwen-voice/`)
+- `requirements.in / requirements.txt`  dependency list (uv generated)

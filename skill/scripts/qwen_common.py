@@ -28,7 +28,7 @@ def load_env() -> None:
 
     Priority (low -> high, never override existing env):
       1) ~/.config/qwen-voice/.env
-      2) <repo>/.config/qwen-voice/.env (walk upwards from this file)
+      2) <repo>/.qwen-voice/.env (walk upwards from this file)
       3) ~/.baoyu-skills/.env (compat)
       4) <repo>/.baoyu-skills/.env (compat)
     """
@@ -38,7 +38,7 @@ def load_env() -> None:
     # project-level preferred
     cur = Path(__file__).resolve()
     for parent in [cur.parent, *cur.parents]:
-        envp = parent / ".config" / "qwen-voice" / ".env"
+        envp = parent / ".qwen-voice" / ".env"
         if envp.exists():
             _load_dotenv_file(envp)
             break

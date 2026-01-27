@@ -7,4 +7,5 @@ work/
 *.wav
 *.mp3
 
-.config/qwen-voice/.env
+
+.qwen-voice/.env
