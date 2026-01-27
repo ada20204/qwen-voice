@@ -1,12 +1,20 @@
-import os
-import re
+from __future__ import annotations
+
 from pathlib import Path
 
 
-def _load_dotenv_file(p: Path) -> None:
-    """Minimal .env loader (KEY=VALUE). Does not override existing env."""
+def _read_dotenv_file(p: Path) -> dict[str, str]:
+    """Read a .env file (KEY=VALUE). Returns empty dict if missing.
+
+    Notes:
+    - Ignores comments and blank lines
+    - Supports optional leading `export `
+    - Strips single/double quotes around values
+    """
     if not p.exists():
-        return
+        return {}
+
+    out: dict[str, str] = {}
     for raw in p.read_text("utf-8", errors="ignore").splitlines():
         line = raw.strip()
         if not line or line.startswith("#"):
@@ -20,46 +28,48 @@ def _load_dotenv_file(p: Path) -> None:
         v = v.strip().strip('"').strip("'")
         if not k:
             continue
-        os.environ.setdefault(k, v)
+        out[k] = v
+    return out
 
 
-def load_env() -> None:
-    """Load env vars for qwen-voice.
-
-    Reads (low -> high, never override existing env):
-      1) ~/.config/qwen-voice/.env
-      2) <repo>/.qwen-voice/.env (walk upwards from this file)
-
-    Existing process env always wins.
-    """
-    # user-level (preferred)
-    _load_dotenv_file(Path.home() / ".config" / "qwen-voice" / ".env")
-
-    # project-level (dev/testing)
+def _find_project_env() -> Path | None:
+    """Find ./\.qwen-voice/.env by walking upwards from this file."""
     cur = Path(__file__).resolve()
     for parent in [cur.parent, *cur.parents]:
         envp = parent / ".qwen-voice" / ".env"
         if envp.exists():
-            _load_dotenv_file(envp)
-            break
+            return envp
+    return None
 
 
 def get_dashscope_key() -> str:
-    """Get DASHSCOPE_API_KEY from env; fallback to ~/.bashrc export line."""
-    load_env()
+    """Get DASHSCOPE_API_KEY.
 
-    key = os.getenv("DASHSCOPE_API_KEY")
-    if key:
-        return key.strip()
+    IMPORTANT: We intentionally IGNORE system environment variables.
+    We only read config from .env files:
+      1) ~/.config/qwen-voice/.env (preferred)
+      2) <repo>/.qwen-voice/.env (dev/testing)
 
-    bashrc = Path.home() / ".bashrc"
-    if bashrc.exists():
-        s = bashrc.read_text("utf-8", errors="ignore")
-        m = re.search(r"export\s+DASHSCOPE_API_KEY=['\"]([^'\"]+)['\"]", s)
-        if m:
-            return m.group(1).strip()
+    If not found, raise a clear error instructing the user to configure it.
+    """
+    user_env = Path.home() / ".config" / "qwen-voice" / ".env"
+    user_cfg = _read_dotenv_file(user_env)
+    if user_cfg.get("DASHSCOPE_API_KEY"):
+        return user_cfg["DASHSCOPE_API_KEY"].strip()
 
-    raise RuntimeError("DASHSCOPE_API_KEY not found in env, ~/.config/qwen-voice/.env, project .qwen-voice/.env, or ~/.bashrc")
+    proj_env = _find_project_env()
+    if proj_env:
+        proj_cfg = _read_dotenv_file(proj_env)
+        if proj_cfg.get("DASHSCOPE_API_KEY"):
+            return proj_cfg["DASHSCOPE_API_KEY"].strip()
+
+    raise RuntimeError(
+        "DASHSCOPE_API_KEY not found. Configure one of:\n"
+        "- ~/.config/qwen-voice/.env\n"
+        "- <repo>/.qwen-voice/.env\n"
+        "Example:\n"
+        "  DASHSCOPE_API_KEY=your_key_here\n"
+    )
 
 
 def ensure_dir(p: Path) -> None:

@@ -28,7 +28,7 @@ The scripts support **both**:
 1) **User-level** (recommended): `~/.config/qwen-voice/.env`
 2) **Project-level** (dev/testing): `./.qwen-voice/.env`
 
-Precedence: user-level first, then project-level. Existing process env always wins (we never override).
+Precedence: user-level first, then project-level.
 
 ### Setup (recommended)
 
