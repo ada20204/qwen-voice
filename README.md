@@ -1,17 +1,24 @@
-# qwen-voice (Clawdbot Skill)
+# qwen-voice (Agent Skill)
 
-Goal: Add **voice understanding + voice reply** to Clawdbot chats.
+Goal: Add **voice understanding + voice reply** to agent chats.
 
-What it does:
+Highlights:
 - ASR: voice → text (optional coarse timestamps via chunking)
 - TTS: text → voice (default voice: Cherry)
 - Voice Clone: one sample voice → your custom voice → voice replies
+
+Works great in **Clawdbot** (and other agent hosts that support Agent Skills).
+
+## Install (Agent Skill)
+
+```bash
+npx skills add ada20204/qwen-voice --yes
+```
 
 ## Requirements
 
 System:
 - ffmpeg
-- curl
 
 Python:
 - Python 3.10+
@@ -29,6 +36,8 @@ The scripts support **both**:
 2) **Project-level** (dev/testing): `./.qwen-voice/.env`
 
 Precedence: user-level first, then project-level.
+
+> Important: We intentionally ignore system environment variables. Only `.env` files are used.
 
 ### Setup (recommended)
 
@@ -51,23 +60,23 @@ cp .qwen-voice/.env.example .qwen-voice/.env
 
 ASR (no timestamps):
 ```bash
-python3 skill/scripts/qwen_asr.py --in /path/to/audio.ogg
+python3 scripts/qwen_asr.py --in /path/to/audio.ogg
 ```
 
 ASR (with coarse timestamps):
 ```bash
-python3 skill/scripts/qwen_asr.py --in /path/to/audio.ogg --timestamps --chunk-sec 3
+python3 scripts/qwen_asr.py --in /path/to/audio.ogg --timestamps --chunk-sec 3
 ```
 
 TTS (preset voice):
 ```bash
-python3 skill/scripts/qwen_tts.py --text '你好，我是 Pi。' --voice Cherry --out /tmp/out.ogg
+python3 scripts/qwen_tts.py --text '你好，我是 Pi。' --voice Cherry --out /tmp/out.ogg
 ```
 
 Voice clone (create profile once, reuse):
 ```bash
-python3 skill/scripts/qwen_voice_clone.py --in ./sample.ogg --name george --out ./george.voice.json
-python3 skill/scripts/qwen_tts.py --text '你好，我是 George。' --voice-profile ./george.voice.json --out /tmp/out.ogg
+python3 scripts/qwen_voice_clone.py --in ./sample.ogg --name george --out ./george.voice.json
+python3 scripts/qwen_tts.py --text '你好，我是 George。' --voice-profile ./george.voice.json --out /tmp/out.ogg
 ```
 
 ## Notes / pitfalls
@@ -78,6 +87,5 @@ python3 skill/scripts/qwen_tts.py --text '你好，我是 George。' --voice-pro
 
 ## Repo layout
 
-- `skill/`  Clawdbot skill (scripts + SKILL.md)
-- `.qwen-voice/`  env template directory (copy to `~/.config/qwen-voice/`)
-- `requirements.in / requirements.txt`  dependency list (uv generated)
+- `SKILL.md` + `scripts/` are the Agent Skill entrypoint (well-known discovery)
+- `.qwen-voice/` env template directory (copy to `~/.config/qwen-voice/`)
