@@ -2,9 +2,9 @@
 __pycache__/
 *.pyc
 work/
-.baoyu-skills/.env
+
 *.ogg
 *.wav
 *.mp3
 
-.qwen-voice/.env
+.config/qwen-voice/.env

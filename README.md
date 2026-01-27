@@ -23,12 +23,12 @@ Required:
 - `DASHSCOPE_API_KEY`
 
 Load order (Baoyu-style, does not override existing env):
-1) `~/.qwen-voice/.env`
-2) `./.qwen-voice/.env` (project)
+1) `~/.config/qwen-voice/.env`
+2) `./.config/qwen-voice/.env` (project)
 
 Example:
 ```bash
-cp .qwen-voice/.env.example .qwen-voice/.env
+cp .config/qwen-voice/.env.example .qwen-voice/.env
 # edit .qwen-voice/.env
 ```
 
@@ -64,5 +64,5 @@ python3 skill/scripts/qwen_tts.py --text '你好，我是 George。' --voice-pro
 ## Repo layout
 
 - `skill/`  Clawdbot skill (scripts + SKILL.md)
-- `.qwen-voice/.env.example`  env template (do not commit real keys)
+- `.config/qwen-voice/.env.example`  env template (do not commit real keys)
 - `requirements.in` / `requirements.txt`  dependency list (uv generated)

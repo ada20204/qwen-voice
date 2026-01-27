@@ -27,18 +27,18 @@ def load_env() -> None:
     """Load env vars with project-specific naming, but keep compatibility.
 
     Priority (low -> high, never override existing env):
-      1) ~/.qwen-voice/.env
-      2) <repo>/.qwen-voice/.env (walk upwards from this file)
+      1) ~/.config/qwen-voice/.env
+      2) <repo>/.config/qwen-voice/.env (walk upwards from this file)
       3) ~/.baoyu-skills/.env (compat)
       4) <repo>/.baoyu-skills/.env (compat)
     """
     # user-level (preferred)
-    _load_dotenv_file(Path.home() / ".qwen-voice" / ".env")
+    _load_dotenv_file(Path.home() / ".config" / "qwen-voice" / ".env")
 
     # project-level preferred
     cur = Path(__file__).resolve()
     for parent in [cur.parent, *cur.parents]:
-        envp = parent / ".qwen-voice" / ".env"
+        envp = parent / ".config" / "qwen-voice" / ".env"
         if envp.exists():
             _load_dotenv_file(envp)
             break
