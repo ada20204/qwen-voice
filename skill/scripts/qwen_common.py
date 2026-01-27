@@ -24,27 +24,23 @@ def _load_dotenv_file(p: Path) -> None:
 
 
 def load_env() -> None:
-    """Load env vars with project-specific naming, but keep compatibility.
+    """Load env vars for qwen-voice.
 
-    Priority (low -> high, never override existing env):
+    Reads (low -> high, never override existing env):
       1) ~/.config/qwen-voice/.env
       2) <repo>/.qwen-voice/.env (walk upwards from this file)
-      3) ~/.baoyu-skills/.env (compat)
-      4) <repo>/.baoyu-skills/.env (compat)
+
+    Existing process env always wins.
     """
     # user-level (preferred)
     _load_dotenv_file(Path.home() / ".config" / "qwen-voice" / ".env")
 
-    # project-level preferred
+    # project-level (dev/testing)
     cur = Path(__file__).resolve()
     for parent in [cur.parent, *cur.parents]:
         envp = parent / ".qwen-voice" / ".env"
         if envp.exists():
             _load_dotenv_file(envp)
-            break
-
-def get_dashscope_key() -> str:
-)
             break
 
 
@@ -63,7 +59,7 @@ def get_dashscope_key() -> str:
         if m:
             return m.group(1).strip()
 
-    raise RuntimeError("DASHSCOPE_API_KEY not found in env, .baoyu-skills/.env, or ~/.bashrc")
+    raise RuntimeError("DASHSCOPE_API_KEY not found in env, ~/.config/qwen-voice/.env, project .qwen-voice/.env, or ~/.bashrc")
 
 
 def ensure_dir(p: Path) -> None:
