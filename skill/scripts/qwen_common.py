@@ -33,7 +33,7 @@ def _read_dotenv_file(p: Path) -> dict[str, str]:
 
 
 def _find_project_env() -> Path | None:
-    """Find ./\.qwen-voice/.env by walking upwards from this file."""
+    """Find ./.qwen-voice/.env by walking upwards from this file."""
     cur = Path(__file__).resolve()
     for parent in [cur.parent, *cur.parents]:
         envp = parent / ".qwen-voice" / ".env"
