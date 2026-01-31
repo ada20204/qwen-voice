@@ -5,7 +5,9 @@ description: "Use Qwen (DashScope/百炼) for speech tasks: (1) ASR speech-to-te
 
 # Qwen Voice (ASR + TTS)
 
-Use the bundled scripts. Prefer environment variable `DASHSCOPE_API_KEY`. If missing, scripts attempt to read it from `~/.bashrc`.
+Use the bundled scripts. Configure `DASHSCOPE_API_KEY` in one of:
+- `~/.config/qwen-voice/.env` (recommended)
+- `<repo>/.qwen-voice/.env` (dev/testing)
 
 ## ASR (speech → text)
 

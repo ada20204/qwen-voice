@@ -12,7 +12,7 @@ Works great in **Clawdbot** (and other agent hosts that support Agent Skills).
 ## Install (Agent Skill)
 
 ```bash
-npx skills add ada20204/qwen-voice --yes
+npx skills add ada20204/qwen-voice
 ```
 
 ## Requirements
