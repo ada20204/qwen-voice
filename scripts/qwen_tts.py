@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 from urllib.request import urlopen
 
-from qwen_common import get_dashscope_key, ensure_dir
+from qwen_common import get_dashscope_key, ensure_dir, default_work_dir, default_venv_dir
 
 
 def ensure_dashscope_venv(venv_dir: Path) -> Path:
@@ -38,7 +38,7 @@ def main():
     ap.add_argument("--voice-profile", default="", help="JSON file created by qwen_voice_clone.py")
     ap.add_argument("--language", default="Chinese")
     ap.add_argument("--out", required=True, help="output path (.ogg recommended)")
-    ap.add_argument("--work-dir", default="work/qwen-voice", help="scratch dir")
+    ap.add_argument("--work-dir", default=default_work_dir(), help="scratch dir")
     args = ap.parse_args()
 
     key = get_dashscope_key()
@@ -87,7 +87,7 @@ def main():
         return
 
     # Otherwise: preset TTS via MultiModalConversation
-    venv_py = ensure_dashscope_venv(Path("work/venv-dashscope"))
+    venv_py = ensure_dashscope_venv(Path(default_venv_dir()))
 
     # call dashscope SDK in a subprocess to avoid importing dependency in system python
     script = work / "_tts_call.py"

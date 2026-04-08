@@ -7,7 +7,7 @@ import sys
 import wave
 from pathlib import Path
 
-from qwen_common import get_dashscope_key, ensure_dir
+from qwen_common import get_dashscope_key, ensure_dir, default_work_dir, default_venv_dir
 
 
 def ensure_dashscope_venv(venv_dir: Path) -> Path:
@@ -33,14 +33,14 @@ def main():
     ap.add_argument("--voice", required=True, help="voice param string (from enrollment)")
     ap.add_argument("--model", default="qwen3-tts-vc-realtime-2026-01-15")
     ap.add_argument("--out", required=True, help="output .wav (pcm 24k mono 16bit)")
-    ap.add_argument("--work-dir", default="work/qwen-voice")
+    ap.add_argument("--work-dir", default=default_work_dir())
     args = ap.parse_args()
 
     key = get_dashscope_key()
     work = Path(args.work_dir)
     ensure_dir(work)
 
-    venv_py = ensure_dashscope_venv(Path("work/venv-dashscope"))
+    venv_py = ensure_dashscope_venv(Path(default_venv_dir()))
 
     # Run realtime TTS via dashscope SDK in venv and write PCM frames to a temp file
     script = work / "_tts_realtime_call.py"

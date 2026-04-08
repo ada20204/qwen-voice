@@ -8,7 +8,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError, URLError
 
-from qwen_common import get_dashscope_key, ensure_dir
+from qwen_common import get_dashscope_key, ensure_dir, default_work_dir
 
 ENDPOINT = "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions"
 MODEL = "qwen3-asr-flash"
@@ -78,7 +78,7 @@ def main():
     ap.add_argument("--in", dest="inp", required=True, help="input audio file (.ogg/.wav/.mp3 etc)")
     ap.add_argument("--timestamps", action="store_true", help="chunk and add coarse timestamps")
     ap.add_argument("--chunk-sec", type=float, default=3.0, help="chunk size in seconds for timestamps")
-    ap.add_argument("--work-dir", default="work/qwen-voice", help="scratch dir")
+    ap.add_argument("--work-dir", default=default_work_dir(), help="scratch dir")
     args = ap.parse_args()
 
     key = get_dashscope_key()

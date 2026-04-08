@@ -8,7 +8,7 @@ from pathlib import Path
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError, URLError
 
-from qwen_common import get_dashscope_key, ensure_dir
+from qwen_common import get_dashscope_key, ensure_dir, default_work_dir
 
 CUSTOMIZE_URL = "https://dashscope.aliyuncs.com/api/v1/services/audio/tts/customization"
 ENROLL_MODEL = "qwen-voice-enrollment"  # fixed
@@ -74,7 +74,7 @@ def main():
     ap.add_argument("--mime", default="audio/wav", help="MIME type for the sample audio")
     ap.add_argument("--target-model", default=DEFAULT_TARGET_MODEL)
     ap.add_argument("--out", required=True, help="output JSON file to store the voice parameter")
-    ap.add_argument("--work-dir", default="work/qwen-voice", help="scratch dir")
+    ap.add_argument("--work-dir", default=default_work_dir(), help="scratch dir")
     args = ap.parse_args()
 
     key = get_dashscope_key()

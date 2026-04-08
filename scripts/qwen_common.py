@@ -74,3 +74,18 @@ def get_dashscope_key() -> str:
 
 def ensure_dir(p: Path) -> None:
     p.mkdir(parents=True, exist_ok=True)
+
+
+def skill_dir() -> Path:
+    """Return the skill root directory (parent of scripts/)."""
+    return Path(__file__).resolve().parent.parent
+
+
+def default_work_dir() -> str:
+    """Return the default work directory inside the skill folder."""
+    return str(skill_dir() / "work" / "qwen-voice")
+
+
+def default_venv_dir() -> str:
+    """Return the default venv directory inside the skill folder."""
+    return str(skill_dir() / "work" / "venv-dashscope")
